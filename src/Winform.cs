@@ -52,7 +52,7 @@ public class WebParser {
 
   static public string[] Parser (string source) {
     //Initialize array of strings.
-    string[] parsed = new string[6]; // Why particulary 6? Dunno, sorry.
+    string[] parsed = new string[10];
 
     //Splitting...
     string[] substrings = Regex.Split(source, "<!-- REPLY CONTAINER -->");
@@ -236,8 +236,10 @@ public class Horo : Form {
       var source = WebParser.Getting();
       bool result = WebParser.Check(source);
       if (result == false) {
-        var parsed = WebParser.Parser(source);
-        Application.Run (new Horo (parsed));
+        if (source != "") {
+          var parsed = WebParser.Parser(source);
+          Application.Run (new Horo (parsed));
+        }
         System.Threading.Thread.Sleep(15000);
       }
       else {
