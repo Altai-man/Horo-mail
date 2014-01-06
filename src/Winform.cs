@@ -65,7 +65,7 @@ public class WebParser {
     string board_name = @"/[abd]";
     string thread_num = @"/[0-9][0-9][0-9][0-9][0-9]*/";
     string text = @"(?s)<div class=_message_>.*?</div>";
-    string pic_link = @"http://.*?.(jpg|png|bmp)";
+    string pic_link = @"http://horochan.ru/data/thumb/thumb_.*?.(jpg|png|bmp)";
 
 
     //Return post number.
@@ -146,13 +146,12 @@ public class Horo : Form {
     if (parsed[4].Length > 0) {
       WebClient webClient = new WebClient();
       webClient.DownloadFile(parsed[4], @"tmp_pic.jpg");
-      Image image1 = new Bitmap(@"tmp_image.jpg");
+      Image image1 = new Bitmap(@"tmp_pic.jpg");
       PictureBox pictureBox1 = new PictureBox();
       pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
       pictureBox1.BorderStyle = BorderStyle.None;
       pictureBox1.ClientSize = new Size(150, 150);
       pictureBox1.Location = new Point(10, 10);
-
       pictureBox1.Image = (Image) image1;
 
       Controls.Add(pictureBox1);
@@ -235,16 +234,14 @@ public class Horo : Form {
   static public void Main () {
     while (true) {
       var source = WebParser.Getting();
-      if (source != "") {
-        bool result = WebParser.Check(source);
-        if (result == false) {
-          var parsed = WebParser.Parser(source);
-          Application.Run (new Horo (parsed));
-          System.Threading.Thread.Sleep(15000);
-        }
-        else {
-          System.Threading.Thread.Sleep(15000);
-        }
+      bool result = WebParser.Check(source);
+      if (result == false) {
+        var parsed = WebParser.Parser(source);
+        Application.Run (new Horo (parsed));
+        System.Threading.Thread.Sleep(15000);
+      }
+      else {
+        System.Threading.Thread.Sleep(15000);
       }
     }
   }
